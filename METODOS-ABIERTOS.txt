@@ -1,0 +1,51 @@
+clc; clear; close all;
+
+% Definir la función y su derivada
+f = @(x) exp(-x) - x;       % Función dada
+df = @(x) -exp(-x) - 1;     % Derivada de f(x)
+g = @(x) exp(-x);           % Función de Punto Fijo
+
+% Parámetros iniciales
+tol = 1e-6; % Tolerancia
+x0 = 0;     % Valor inicial
+max_iter = 100; % Máximo de iteraciones
+
+%% Método de Punto Fijo
+fprintf('Método de Punto Fijo\n');
+x_pf = x0;
+iter_pf = 0;
+
+while true
+    x_next = g(x_pf);  % Evaluar g(x)
+    error = abs(x_next - x_pf); % Calcular error
+    fprintf('Iter %d: x = %.6f, Error = %.6e\n', iter_pf, x_next, error);
+    
+    if error < tol || iter_pf >= max_iter
+        break;
+    end
+    
+    x_pf = x_next;  % Actualizar x
+    iter_pf = iter_pf + 1;
+end
+fprintf('Solución Punto Fijo: x = %.6f\n\n', x_pf);
+
+%% Método de Newton-Raphson
+fprintf('Método de Newton-Raphson\n');
+x_nr = x0;
+iter_nr = 0;
+
+while true
+    fx = f(x_nr);
+    dfx = df(x_nr);
+    x_next = x_nr - fx / dfx;  % Fórmula de Newton-Raphson
+    error = abs(x_next - x_nr); % Calcular error
+    fprintf('Iter %d: x = %.6f, Error = %.6e\n', iter_nr, x_next, error);
+    
+    if error < tol || iter_nr >= max_iter
+        break;
+    end
+    
+    x_nr = x_next; % Actualizar x
+    iter_nr = iter_nr + 1;
+end
+fprintf('Solución Newton-Raphson: x = %.6f\n', x_nr);
